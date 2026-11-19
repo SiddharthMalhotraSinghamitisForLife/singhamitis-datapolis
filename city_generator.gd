@@ -24,6 +24,16 @@ func create_box(pos, size, color):
 	instance.position = pos
 	add_child(instance)
 
+	var body = StaticBody3D.new()
+	body.position = pos
+	add_child(body)
+
+	var collision = CollisionShape3D.new()
+	var shape = BoxShape3D.new()
+	shape.size = size
+	collision.shape = shape
+	body.add_child(collision)
+
 func generate_city():
 	var total = CITY_SIZE * BLOCK_SIZE
 
