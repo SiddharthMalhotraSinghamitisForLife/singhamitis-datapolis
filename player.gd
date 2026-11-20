@@ -6,6 +6,7 @@ const JUMP_VELOCITY = 5.0
 const MOUSE_SENSITIVITY = 0.002
 
 @onready var camera = $Camera3D
+@onready var interaction_ray = $Camera3D/InteractionRay
 
 var gravity = 9.8
 
@@ -19,12 +20,25 @@ func _unhandled_input(event):
 			camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 			camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
-		if event is InputEventKey:
-			if event.pressed and event.keycode == KEY_ESCAPE:
-				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_ESCAPE:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-			if event.pressed and event.keycode == KEY_F:
-				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		if event.pressed and event.keycode == KEY_F:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+		if event.pressed and not event.echo and event.keycode == KEY_E:
+			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				try_interact()
+
+func try_interact():
+	interaction_ray.force_raycast_update()
+
+	if interaction_ray.is_colliding():
+		var target = interaction_ray.get_collider()
+
+		if target != null and target.is_in_group("vault"):
+			target.interact()
 
 func _physics_process(delta):
 	if not is_on_floor():

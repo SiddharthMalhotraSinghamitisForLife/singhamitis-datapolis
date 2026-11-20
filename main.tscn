@@ -2,10 +2,17 @@
 
 [ext_resource type="Script" uid="uid://b8r7h72mlm6m6" path="res://city_generator.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://dstpbrarg3rkt" path="res://player.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://dwwfcljim5aq2" path="res://vault.gd" id="3_h2yge"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0oafl"]
 radius = 0.35
 height = 1.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_0oafl"]
+size = Vector3(3, 3, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s1nk3"]
+size = Vector3(3, 3, 3)
 
 [node name="Main" type="Node3D" unique_id=67633911]
 script = ExtResource("1_ig7tw")
@@ -20,3 +27,16 @@ shape = SubResource("CapsuleShape3D_0oafl")
 [node name="Camera3D" type="Camera3D" parent="Player" unique_id=1764477802]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
 current = true
+
+[node name="InteractionRay" type="RayCast3D" parent="Player/Camera3D" unique_id=940326838]
+target_position = Vector3(0, 0, -15)
+
+[node name="Vault" type="StaticBody3D" parent="." unique_id=1223508472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.5, 12)
+script = ExtResource("3_h2yge")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Vault" unique_id=303486727]
+mesh = SubResource("BoxMesh_0oafl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Vault" unique_id=209573986]
+shape = SubResource("BoxShape3D_s1nk3")
